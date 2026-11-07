@@ -1,0 +1,263 @@
+{
+  "name": "job_formula1_lakehouse_full_refresh",
+  "email_notifications": {
+    "no_alert_for_skipped_runs": false
+  },
+  "webhook_notifications": {},
+  "timeout_seconds": 0,
+  "schedule": {
+    "quartz_cron_expression": "59 5 15 * * ?",
+    "timezone_id": "America/Los_Angeles",
+    "pause_status": "PAUSED"
+  },
+  "max_concurrent_runs": 1,
+  "tasks": [
+    {
+      "task_key": "01_injest_bronze_file",
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/karanamsc@gmail.com/formula1-project/01-bronze/01. Bronze",
+        "source": "WORKSPACE"
+      },
+      "job_cluster_key": "Job_cluster",
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    },
+    {
+      "task_key": "01-transform_circuits_data",
+      "depends_on": [
+        {
+          "task_key": "01_injest_bronze_file"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/karanamsc@gmail.com/formula1-project/02-silver/01.Transform Circuits Data",
+        "source": "WORKSPACE"
+      },
+      "job_cluster_key": "Job_cluster",
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    },
+    {
+      "task_key": "02-tranform_races_data",
+      "depends_on": [
+        {
+          "task_key": "01_injest_bronze_file"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/karanamsc@gmail.com/formula1-project/02-silver/02.Transform Races Data",
+        "source": "WORKSPACE"
+      },
+      "job_cluster_key": "Job_cluster",
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    },
+    {
+      "task_key": "01_Build_Races_Dimension",
+      "depends_on": [
+        {
+          "task_key": "01-transform_circuits_data"
+        },
+        {
+          "task_key": "02-tranform_races_data"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/karanamsc@gmail.com/formula1-project/03-gold/01.Build Races Dimension",
+        "source": "WORKSPACE"
+      },
+      "job_cluster_key": "Job_cluster",
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    },
+    {
+      "task_key": "03-tranform_constructors_data",
+      "depends_on": [
+        {
+          "task_key": "01_injest_bronze_file"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/karanamsc@gmail.com/formula1-project/02-silver/03.Transform Constructors Data",
+        "source": "WORKSPACE"
+      },
+      "job_cluster_key": "Job_cluster",
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    },
+    {
+      "task_key": "04-tranform_drivers_data",
+      "depends_on": [
+        {
+          "task_key": "01_injest_bronze_file"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/karanamsc@gmail.com/formula1-project/02-silver/04.Transform Drivers Data",
+        "source": "WORKSPACE"
+      },
+      "job_cluster_key": "Job_cluster",
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    },
+    {
+      "task_key": "05-tranform_results_data",
+      "depends_on": [
+        {
+          "task_key": "01_injest_bronze_file"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/karanamsc@gmail.com/formula1-project/02-silver/05.Transform Results Data",
+        "source": "WORKSPACE"
+      },
+      "job_cluster_key": "Job_cluster",
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    },
+    {
+      "task_key": "06-tranform_sprints_data",
+      "depends_on": [
+        {
+          "task_key": "01_injest_bronze_file"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/karanamsc@gmail.com/formula1-project/02-silver/06.Transform Sprints Data",
+        "source": "WORKSPACE"
+      },
+      "job_cluster_key": "Job_cluster",
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    },
+    {
+      "task_key": "91_Build_Nationality_Region_Reference",
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/karanamsc@gmail.com/formula1-project/03-gold/91.Build Nationality Region Reference",
+        "source": "WORKSPACE"
+      },
+      "job_cluster_key": "Job_cluster",
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    },
+    {
+      "task_key": "02_Build_Constructors_Dimension",
+      "depends_on": [
+        {
+          "task_key": "03-tranform_constructors_data"
+        },
+        {
+          "task_key": "91_Build_Nationality_Region_Reference"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/karanamsc@gmail.com/formula1-project/03-gold/02.Build Constructors Dimension",
+        "source": "WORKSPACE"
+      },
+      "job_cluster_key": "Job_cluster",
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    },
+    {
+      "task_key": "03_Build_Drivers_Dimension",
+      "depends_on": [
+        {
+          "task_key": "04-tranform_drivers_data"
+        },
+        {
+          "task_key": "91_Build_Nationality_Region_Reference"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/karanamsc@gmail.com/formula1-project/03-gold/03.Build Drivers Dimension",
+        "source": "WORKSPACE"
+      },
+      "job_cluster_key": "Job_cluster",
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "webhook_notifications": {},
+      "disabled": false
+    },
+    {
+      "task_key": "04_Build_Results_Fact",
+      "depends_on": [
+        {
+          "task_key": "05-tranform_results_data"
+        },
+        {
+          "task_key": "06-tranform_sprints_data"
+        }
+      ],
+      "run_if": "ALL_SUCCESS",
+      "notebook_task": {
+        "notebook_path": "/Workspace/Users/karanamsc@gmail.com/formula1-project/03-gold/04.Build Results Fact",
+        "source": "WORKSPACE"
+      },
+      "job_cluster_key": "Job_cluster",
+      "timeout_seconds": 0,
+      "email_notifications": {},
+      "disabled": false
+    }
+  ],
+  "job_clusters": [
+    {
+      "job_cluster_key": "Job_cluster",
+      "new_cluster": {
+        "cluster_name": "",
+        "spark_version": "18.x-scala2.13",
+        "spark_conf": {
+          "spark.master": "local[*, 4]",
+          "spark.databricks.cluster.profile": "singleNode"
+        },
+        "azure_attributes": {
+          "first_on_demand": 1,
+          "availability": "SPOT_WITH_FALLBACK_AZURE",
+          "spot_bid_max_price": -1
+        },
+        "node_type_id": "Standard_D4ds_v5",
+        "custom_tags": {
+          "ResourceClass": "SingleNode"
+        },
+        "enable_elastic_disk": true,
+        "data_security_mode": "SINGLE_USER",
+        "runtime_engine": "STANDARD",
+        "num_workers": 0
+      }
+    }
+  ],
+  "queue": {
+    "enabled": true
+  },
+  "performance_target": "PERFORMANCE_OPTIMIZED"
+}

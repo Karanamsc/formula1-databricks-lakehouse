@@ -1,0 +1,8 @@
+# Databricks notebook source
+#Unity Catalog Object Name
+catalog_name='databricks_dev'
+schema='formula1'
+
+# COMMAND ----------
+
+landing_folder_path='/Volumes/databricks_dev/formula1/landing'

@@ -1,0 +1,28 @@
+# Databricks / Python
+.databricks/
+.databrickscfg
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+manifest.mf
+
+# Secrets and local config
+.env
+*.pem
+secrets.*
+*_secret*
+
+# Data (keep raw/landing files in the Unity Catalog Volume, not git)
+*.csv
+*.parquet
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+.env
+__pycache__/
+venv/
+.pytest_cache/
